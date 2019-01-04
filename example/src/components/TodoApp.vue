@@ -43,7 +43,19 @@
                       <router-link to="/completed">Completed</router-link>
                     </li>
                 </ul> -->
+                <ul class="filters">
+                    <li>
+                       <a> <button v-on:click="getTodosByStatus('all')">All</button></a>
+                    </li>
 
+                    <li>
+                       <a><button>Active</button></a>
+                    </li>
+
+                    <li>
+                      <a><button>Completed</button></a>
+                    </li>
+                </ul> 
           <!-- Hidden if no completed items are left ↓ -->
                  <button class="clear-completed" v-on:click="clearAllTodos()">Clear completed</button>
             </footer>
@@ -61,6 +73,12 @@
     export default {
         name: 'TodoApp',
         props: ['newTodo'],
+        originalTodos:null,
+
+        mounted(){
+         this.originalTodos = [...this.todos];
+        },
+
         data() {
             return { 
                         title: "Todo list", 
@@ -69,15 +87,17 @@
                                     {"id":"2", "text" : "Learn React JS", isDone: true},
                                     {"id":"3", "text" : "Learn Vue", isDone: false},
                                     {"id":"4", "text" : "Build something awesome", isDone: false}
-                                  ],
+                                ],
                         editingTodo: null,
                         beforeText : null,
+                        originalTodos : null
                     }
         },
 
         methods: {
             addNew(){
-                this.todos.push({"id": this.countItems + 1, "text": this.newTodo, "isDone": false});
+                var item = {"id": this.countItems + 1, "text": this.newTodo, "isDone": false};
+                this.todos.push(item);
                 this.newTodo = "";
             },
 
@@ -105,6 +125,10 @@
 
             clearAllTodos: function(){
                 this.todos = [];
+            },
+
+            getTodosByStatus: function(status){
+               alert(status);
             }
         },
 
