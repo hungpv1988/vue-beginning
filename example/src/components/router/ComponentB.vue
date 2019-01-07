@@ -1,6 +1,6 @@
 <template>
   <div>
-     Component B {{this.$router.params.id}}
+     Component B 
   </div>
 </template>
 
