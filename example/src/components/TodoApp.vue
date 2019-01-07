@@ -8,7 +8,7 @@
 
             <section class="main">
                 <ul class="todo-list">
-                    <li v-for="todo in todos" :key="todo.id" :class="{completed: todo.isDone, editing: todo === editingTodo}" >
+                    <li v-for="todo in shownItems" :key="todo.id" :class="{completed: todo.isDone, editing: todo === editingTodo}" >
                         <div class="view">
                             <input class="toggle" type="checkbox" v-model="todo.isDone" v-on:click="onTodoStatusChange({todo})">
                             <label @dblclick="startEditingTodo(todo)">{{todo.text}}</label>
@@ -61,11 +61,10 @@
     export default {
         name: 'TodoApp',
         props: ['newTodo'],
-        originalTodos:null,
 
         mounted(){
-         this.originalTodos = [...this.todos];
-        },
+         //this.originalTodos = [...this.todos];
+       },
 
         data() {
             return { 
@@ -90,7 +89,6 @@
             },
 
             onTodoStatusChange: function(todo){
-                alert(1);
                 todo.isDone = !todo.isDone;
             },
 
@@ -122,12 +120,33 @@
         },
 
         computed: {
+            status() {
+                return this.$route.params.status;
+            },
+
             countItems:function(){
                 return  this.todos.length;
             },
 
             itemsLeft: function(){
                 return this.todos.filter(todo => !todo.isDone).length;
+            },
+
+            activeItems: function(){
+                return this.todos.filter(todo => !todo.isDone);
+            },
+
+            completedItems: function(){
+                 return this.todos.filter(todo => todo.isDone);
+            },
+
+            shownItems:function(){
+                switch(this.status)
+                {
+                    case 'active': return this.activeItems;
+                    case 'completed': return this.completedItems;
+                    default: return this.todos;
+                }
             }
         }
     }
