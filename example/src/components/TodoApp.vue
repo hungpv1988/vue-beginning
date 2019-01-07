@@ -26,11 +26,11 @@
 
             <footer class="footer">
                 <span class="todo-count">
-                    <strong>{{itemsLeft}}</strong> item(s) left
+                    <strong>{{itemsLeft}}</strong> item(s) left 
                 </span>
 
           <!-- Remove this if you don't implement routing -->
-                <!-- <ul class="filters">
+                <ul class="filters">
                     <li>
                        <router-link to="/all">All</router-link>
                     </li>
@@ -42,20 +42,8 @@
                     <li>
                       <router-link to="/completed">Completed</router-link>
                     </li>
-                </ul> -->
-                <ul class="filters">
-                    <li>
-                       <a> <button v-on:click="getTodosByStatus('all')">All</button></a>
-                    </li>
-
-                    <li>
-                       <a><button>Active</button></a>
-                    </li>
-
-                    <li>
-                      <a><button>Completed</button></a>
-                    </li>
-                </ul> 
+                </ul>
+                <router-view></router-view> 
           <!-- Hidden if no completed items are left ↓ -->
                  <button class="clear-completed" v-on:click="clearAllTodos()">Clear completed</button>
             </footer>
@@ -102,6 +90,7 @@
             },
 
             onTodoStatusChange: function(todo){
+                alert(1);
                 todo.isDone = !todo.isDone;
             },
 
