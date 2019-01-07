@@ -9,7 +9,8 @@
             <section class="main">
                 <ul class="todo-list">
                     <li v-for="todo in shownItems" :key="todo.id" :class="{completed: todo.isDone, editing: todo === editingTodo}" >
-                        <div class="view">
+                        <Item v-bind:todo="todo" v-bind:test="alert()"/>
+                        <!-- <div class="view">
                             <input class="toggle" type="checkbox" v-model="todo.isDone" v-on:click="onTodoStatusChange({todo})">
                             <label @dblclick="startEditingTodo(todo)">{{todo.text}}</label>
                             <button class="destroy" v-on:click="destroyTodo(todo)"></button>
@@ -19,7 +20,7 @@
                 @keyup.escape="cancelEditingTodo(todo)"
                 @keyup.enter="finishEditingTodo(todo)"
                 @blur="finishEditingTodo(todo)"
-                v-model.trim="todo.text">
+                v-model.trim="todo.text"> -->
                     </li>
               </ul>
             </section>
@@ -58,10 +59,13 @@
 </template>
 
 <script>
+    import Item from './Item.vue';
     export default {
         name: 'TodoApp',
         props: ['newTodo'],
-
+        components:{
+            Item
+        },
         mounted(){
          //this.originalTodos = [...this.todos];
        },
@@ -82,6 +86,10 @@
         },
 
         methods: {
+            alert(){
+                alert(1);
+            },
+            
             addNew(){
                 var item = {"id": this.countItems + 1, "text": this.newTodo, "isDone": false};
                 this.todos.push(item);
