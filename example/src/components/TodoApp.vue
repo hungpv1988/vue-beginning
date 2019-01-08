@@ -2,27 +2,15 @@
     <div>
         <section class="todoapp">
             <header class="header">
-                <h1>Items: {{ countItems }}</h1>
-                <input class="new-todo" placeholder="What needs to be done?" v-model="newTodo" autofocus v-on:keyup.enter="addNew">
+               <Header :countItems="this.todos.length" @add="addNew" />
             </header>
 
             <section class="main">
                 <ul class="todo-list">
-                    <li v-for="todo in shownItems" :key="todo.id" :class="{completed: todo.isDone, editing: todo === editingTodo}" >
-                        <Item v-bind:todo="todo" v-bind:test="alert()"/>
-                        <!-- <div class="view">
-                            <input class="toggle" type="checkbox" v-model="todo.isDone" v-on:click="onTodoStatusChange({todo})">
-                            <label @dblclick="startEditingTodo(todo)">{{todo.text}}</label>
-                            <button class="destroy" v-on:click="destroyTodo(todo)"></button>
-                        </div>
-
-                              <input class="edit"
-                @keyup.escape="cancelEditingTodo(todo)"
-                @keyup.enter="finishEditingTodo(todo)"
-                @blur="finishEditingTodo(todo)"
-                v-model.trim="todo.text"> -->
+                    <li v-for="todo in shownItems" :key="todo.id" :class="{completed: todo.isDone, editing: todo === editingTodo}" > 
+                        <Item :todo="todo" @destroy="destroyTodo" @edit="startEditingTodo" @cancelEdit="cancelEditingTodo" @finishEdit="finishEditingTodo"/> 
                     </li>
-              </ul>
+                </ul>
             </section>
 
             <footer class="footer">
@@ -60,15 +48,18 @@
 
 <script>
     import Item from './Item.vue';
+    import Header from './Header.vue';
+
     export default {
         name: 'TodoApp',
         props: ['newTodo'],
         components:{
-            Item
+            Item,
+            Header
         },
-        mounted(){
-         //this.originalTodos = [...this.todos];
-       },
+ 
+ mounted(){
+        },
 
         data() {
             return { 
@@ -80,24 +71,18 @@
                                     {"id":"4", "text" : "Build something awesome", isDone: false}
                                 ],
                         editingTodo: null,
-                        beforeText : null,
-                        originalTodos : null
+                        beforeText : null
                     }
         },
 
         methods: {
-            alert(){
-                alert(1);
-            },
-            
-            addNew(){
-                var item = {"id": this.countItems + 1, "text": this.newTodo, "isDone": false};
+            addNew(text, callback){
+                var item = {"id": this.countItems + 1, "text": text, "isDone": false};
                 this.todos.push(item);
-                this.newTodo = "";
-            },
-
-            onTodoStatusChange: function(todo){
-                todo.isDone = !todo.isDone;
+                
+                if (!callback){
+                    callback();
+                }
             },
 
             destroyTodo:function(todo){

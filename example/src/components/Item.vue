@@ -1,15 +1,29 @@
 <template>
-    <div class="view">
-        <input class="toggle" type="checkbox" v-model="this.todo.isDone" v-on:click="test()">
-        <label @dblclick="startEditingTodo(this.todo)">{{this.todo.text}}</label>
-        <button class="destroy" v-on:click="destroyTodo(this.todo)"></button>
-     </div>
+        <div>
+            <div class="view">
+                <input class="toggle" type="checkbox" v-model="todo.isDone" v-on:click="onTodoStatusChange({todo})">
+                <label @dblclick="startEditingTodo(todo)">{{todo.text}}</label>
+                <button class="destroy" v-on:click="destroyTodo(todo)"></button>
+            </div>
+
+            <input class="edit"
+                    @keyup.escape="cancelEditingTodo(todo)"
+                    @keyup.enter="finishEditingTodo(todo)"
+                    @blur="finishEditingTodo(todo)"
+                    v-model.trim="todo.text">
+        </div>
 </template>
 
 <script>
 export default {
     name: 'item',
-    props: ['todo', 'test'],
+
+    props: ['todo'], 
+    
+    mounted(){
+        //this.todo.text = 'fuck';
+     //   alert(this.todo.text);
+    },
     
     methods:{
         onTodoStatusChange: function(todo){
@@ -17,12 +31,20 @@ export default {
         },
 
         startEditingTodo: function(todo){
-            this.beforeText = todo.text;
+            this.$emit('edit', todo);
         },
 
         destroyTodo:function(todo){
-            alert(todo);
+            this.$emit('destroy', todo);
         },
+
+        cancelEditingTodo:function(todo){
+            this.$emit('cancelEdit', todo);
+        },
+
+        finishEditingTodo: function(todo){
+            this.$emit('finishEdit', todo);
+        }
     }
 }
 </script>
